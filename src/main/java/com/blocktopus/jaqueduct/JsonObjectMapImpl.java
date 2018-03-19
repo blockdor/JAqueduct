@@ -17,7 +17,7 @@ public class JsonObjectMapImpl extends LinkedHashMap<String, Object> implements 
 	private static final long serialVersionUID = 1L;
 	
 	private JAqueductFactory jsonFactory;
-	
+
 	JsonObjectMapImpl(JAqueductFactory jsonFactory) {
 		super();
 		this.jsonFactory=jsonFactory;
@@ -34,83 +34,92 @@ public class JsonObjectMapImpl extends LinkedHashMap<String, Object> implements 
 	}
 
 	@Override
-	public Object removeProperty(String name) {
-		return this.remove(name);
+	public Object removeProperty(String propertyName) {
+		return this.remove(propertyName);
 	}
 
-	public Optional<JsonObject> getOptionalJsonObject(String name) {
-		if (!hasProperty(name)) {
+	public Optional<JsonObject> getOptionalJsonObject(String propertyName) {
+		if (!hasProperty(propertyName)) {
 			return Optional.empty();
 		}
-		return Optional.of(getJsonObject(name));
-
+		return Optional.of(getJsonObject(propertyName));
 	}
 
 	@Override
-	public JsonObject getJsonObject(String name)  {
-		if (!hasProperty(name)) {
-			throw new JAqueductException(name+" is not a property on this object");
+	public JsonObject getJsonObject(String propertyName)  {
+		if (!hasProperty(propertyName)) {
+			throw new JAqueductException(propertyName+" is not a property on this object",this);
 		}
-		JsonObject jo = toClass(JsonObject.class,jsonFactory.getObjectMapper()).apply(getProperty(name));
+		JsonObject jo = toClass(JsonObject.class,jsonFactory.getObjectMapper()).apply(getProperty(propertyName));
 		if(jo==null) {
-			throw new JAqueductException("property is set but null");
+			throw new JAqueductException(propertyName+" is set but null",this);
 		}
-		writeProperty(name, jo);
+		writeProperty(propertyName, jo);
 		return jo;
 
 	}
 
 
 	@Override
-	public <T> Optional<T> getOptionalProperty(String name, Class<T> clazz) {
-		if (!hasProperty(name)) {
+	public <T> Optional<T> getOptionalProperty(String propertyName, Class<T> clazz) {
+		if (!hasProperty(propertyName)) {
 			return Optional.empty();
 		} else {
-			return Optional.ofNullable(getProperty(name, clazz));
+			return Optional.ofNullable(getProperty(propertyName, clazz));
 		}
 	}
 
 	@Override
-	public <T> T getProperty(String name, Class<T> clazz) {
-		return toClass(clazz,jsonFactory.getObjectMapper()).apply(getProperty(name));
+	public <T> T getProperty(String propertyName, Class<T> clazz) {
+		return toClass(clazz,jsonFactory.getObjectMapper()).apply(getProperty(propertyName));
 	}
 
 	@Override
-	public boolean hasProperty(String name) {
-		return this.containsKey(name);
+	public boolean hasProperty(String propertyName) {
+		return this.containsKey(propertyName);
 	}
 
 	@Override
-	public Class<?> getPropertyType(String name) {
-		return getProperty(name).getClass();
+	public Class<?> getPropertyType(String propertyName) {
+		return getProperty(propertyName).getClass();
 	}
 
 	@Override
-	public Object getProperty(String name) {
-		if (!hasProperty(name)) {
-			throw new JAqueductException(name + " not found");
+	public Object getProperty(String propertyName) {
+		if (!hasProperty(propertyName)) {
+			throw new JAqueductException(propertyName+" is not a property on this object",this);
 		}
-		return this.get(name);
+		return this.get(propertyName);
 	}
 
 	@Override
-	public String getString(String name) {
-		return getProperty(name, String.class);
+	public String getString(String propertyName) {
+		return getProperty(propertyName, String.class);
 	}
 
 	@Override
-	public Optional<String> getOptionalString(String name) {
-		return getOptionalProperty(name,  String.class);
+	public Optional<String> getOptionalString(String propertyName) {
+		return getOptionalProperty(propertyName,  String.class);
 	}
 
 	@Override
-	public Integer getInteger(String name) {
-		return getProperty(name, Integer.class);
+	public Integer getInteger(String propertyName) {
+		return getProperty(propertyName, Integer.class);
 	}
 
 	@Override
-	public Optional<Integer> getOptionalInteger(String name) {
-		return getOptionalProperty(name,Integer.class);
+	public Optional<Double> getOptionalDouble(String propertyName) {
+		return getOptionalProperty(propertyName,  Double.class);
+	}
+
+	@Override
+	public Double getDouble(String propertyName) {
+		return getProperty(propertyName, Double.class);
+	}
+
+	@Override
+	public Optional<Integer> getOptionalInteger(String propertyName) {
+		return getOptionalProperty(propertyName,Integer.class);
 	}
 
 	@Override
@@ -119,45 +128,50 @@ public class JsonObjectMapImpl extends LinkedHashMap<String, Object> implements 
 	}
 
 	@Override
-	public Optional<Object> getOptionalProperty(String name) {
-		if (!hasProperty(name)) {
+	public Optional<Object> getOptionalProperty(String propertyName) {
+		if (!hasProperty(propertyName)) {
 			return Optional.empty();
 		} else {
-			return Optional.of(getProperty(name));
+			return Optional.of(getProperty(propertyName));
 		}
 	}
 
 	@Override
-	public <T> Optional<List<T>> getOptionalList(String name, Class<T> clazz) {
-		if (!hasProperty(name)) {
+	public <T> Optional<List<T>> getOptionalList(String propertyName, Class<T> clazz) {
+		if (!hasProperty(propertyName)) {
 			return Optional.empty();
 		}
-		return Optional.of(getList(name, clazz));
+		return Optional.of(getList(propertyName, clazz));
 	}
 
 	@Override
-	public <T> List<T> getList(String name, Class<T> clazz) {
+	public <T> List<T> getList(String propertyName, Class<T> clazz) {
 		try {
-			Object property = getProperty(name);
+			Object property = getProperty(propertyName);
 			List<T> list = toListOf(toClass(clazz,jsonFactory.getObjectMapper())).apply(property);
-			writeProperty(name, list);
+			writeProperty(propertyName, list);
 			return list;
 		} catch (Throwable re) {
-			throw new JAqueductException("Error while getting " + name, re);
+			throw new JAqueductException("Error while getting " + propertyName, re,this);
 		}
 	}
-	
+
+	public <T> T getGenericProperty(String name){
+	    return (T) get(name);
+    }
+
+
 	@Override
 	public <T> T getProperty(String name, Function<Object, T> valueConvertingFunction) {
 		return valueConvertingFunction.apply(getProperty(name));
 	}
 
 	@Override
-	public <T> Optional<T> getOptionalProperty(String name, Function<Object, T> valueConvertingFunction) {
-		if (!hasProperty(name)) {
+	public <T> Optional<T> getOptionalProperty(String propertyName, Function<Object, T> valueConvertingFunction) {
+		if (!hasProperty(propertyName)) {
 			return Optional.empty();
 		} else {
-			return Optional.of(getProperty(name, valueConvertingFunction));
+			return Optional.of(getProperty(propertyName, valueConvertingFunction));
 		}
 	}
 
@@ -206,42 +220,6 @@ public class JsonObjectMapImpl extends LinkedHashMap<String, Object> implements 
 	}
 
 	@Override
-	public List<JsonObject> flattenTree(){
-		List<JsonObject> flatList = new ArrayList<>();
-		forEachJsonObjectInTree(flatList::add);
-		return flatList;
-	}
-
-	@Override
-	public List<JsonObject> findJsonObjectInTreeByPropertyName(String nameToFind){
-		List<JsonObject> found = new ArrayList<>();
-		forEachJsonObjectInTree(
-				jo-> {
-					if (jo.isJsonObject(nameToFind)) {
-						found.add(jo.getJsonObject(nameToFind));
-					}
-				}
-		);
-		return found;
-	}
-
-
-	@SuppressWarnings("unchecked")
-	public void forEachJsonObjectInTree(Consumer<JsonObject> consumer) {
-		Set<String> names = getPropertyNameList();
-		for(String name :names) {
-			if(isList(name, JsonObject.class)) {
-				List<JsonObject> joList = getListOfJsonObject(name);
-				joList.forEach(jo1->jo1.forEachJsonObjectInTree(consumer));
-			}
-			if(isJsonObject(name)) {
-				consumer.accept(getJsonObject(name));
-				getJsonObject(name).forEachJsonObjectInTree(consumer);
-			}
-		}
-	}
-
-	@Override
 	public Optional<List<JsonObject>> getOptionalListOfJsonObject(String propertyName) {
 		return getOptionalList(propertyName, JsonObject.class);
 	}
@@ -277,6 +255,7 @@ public class JsonObjectMapImpl extends LinkedHashMap<String, Object> implements 
 		return joList;
 	}
 
-
-
+	public JsonTree getTree(){
+		return new JsonTree(this);
+	}
 }

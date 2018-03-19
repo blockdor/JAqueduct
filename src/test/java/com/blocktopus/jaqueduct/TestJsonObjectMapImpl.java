@@ -126,12 +126,11 @@ public class TestJsonObjectMapImpl {
 	}
 	
 	@Test
-	public void getIntegerFromString() throws Exception{
+	public void getIntegerFromString() throws Exception {
 		createData();
 		Integer id = testClass.getInteger("stringid");
-		assertEquals(1,id.intValue());
+		assertEquals(1, id.intValue());
 	}
-	
 
 	@Test
 	public void getListOfJsonObjectDefaultMapper() throws Exception{

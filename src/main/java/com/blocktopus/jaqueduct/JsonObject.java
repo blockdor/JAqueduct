@@ -18,10 +18,6 @@ public interface JsonObject {
 	boolean isJsonObject(String propertyName);
 	boolean isClass(String propertyName, Class<?> clazz);
 	
-	void forEachJsonObjectInTree(Consumer<JsonObject> consumer);
-	List<JsonObject> findJsonObjectInTreeByPropertyName(String nameToFind);
-	List<JsonObject> flattenTree();
-	
 	Optional<Object> getOptionalProperty(String propertyName);
 	Object getProperty(String propertyName);
 	
@@ -39,7 +35,10 @@ public interface JsonObject {
 	
 	Optional<Integer> getOptionalInteger(String propertyName);
 	Integer getInteger(String propertyName) ;
-	
+
+	Optional<Double> getOptionalDouble(String propertyName);
+	Double getDouble(String propertyName) ;
+
 	<T> Optional<List<T>> getOptionalList(String propertyName,Class<T> membersClazz);
 	<T> List<T> getList(String propertyName,Class<T> membersClazz);
 	
@@ -51,5 +50,6 @@ public interface JsonObject {
 	
 	JsonObject deepCopy();
 
+    <T> T getGenericProperty(String name);
 
 }
