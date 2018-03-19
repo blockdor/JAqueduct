@@ -85,6 +85,7 @@ public class TestFilters {
     @Test
     public void testAllOps(){
         for (PropertyFilter.Operator operator : PropertyFilter.Operator.values()) {
+            System.out.println(operator);
             Filter f = FilterFactory.getFilter("(@.age "+operator.value+" 'bob')");
             assertEquals(PropertyFilter.class,f.getClass());
             PropertyFilter pf = (PropertyFilter)f;

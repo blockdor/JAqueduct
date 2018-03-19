@@ -20,6 +20,8 @@ public class FilterFactory {
         boolean wasJustAnd = false;
         boolean wasJustOr = false;
 
+        boolean wasJustEscape = false;
+
         StringBuilder propName = new StringBuilder();
 
         StringBuilder op = new StringBuilder();
@@ -101,21 +103,7 @@ public class FilterFactory {
                                 }
                                 break;
                             case '<':
-                                if (inString) {
-                                    value.append(c);
-                                } else {
-                                    isProp = false;
-                                    op.append(c);
-                                }
-                                break;
                             case '>':
-                                if (inString) {
-                                    value.append(c);
-                                } else {
-                                    isProp = false;
-                                    op.append(c);
-                                }
-                                break;
                             case '~':
                                 if (inString) {
                                     value.append(c);
@@ -124,6 +112,7 @@ public class FilterFactory {
                                     op.append(c);
                                 }
                                 break;
+
                             case '=':
                                 if (inString) {
                                     value.append(c);
@@ -138,65 +127,73 @@ public class FilterFactory {
                                 }
                                 break;
                             case '&':
-                                if (!wasJustAnd) {
-                                    Filter newFilter;
-                                    if(propName.length()!=0) {
-                                        newFilter = makePropertyFilter(propName.toString(), value.toString(), op.toString(), isStringValue);
-                                        propName = new StringBuilder();
-                                        value = new StringBuilder();
-                                        op = new StringBuilder();
-                                        isStringValue = false;
-                                    } else {
-                                        newFilter = getFilter(inBracketString.toString());
-                                    }
-                                    if (isAnd) {
-                                        currentFilter = new AndFilter(currentFilter, newFilter);
-                                    } else {
-                                        if (isOR) {
-                                            //ERK
-                                            currentFilter = new OrFilter(currentFilter, newFilter);
-                                            isOR = false;
-                                        } else {
-                                            currentFilter = newFilter;
-                                        }
-                                    }
-
-                                    isAnd = true;
-                                    wasJustAnd = true;
+                                if (inString) {
+                                    value.append(c);
                                 } else {
-                                    wasJustAnd = false;
+                                    if (!wasJustAnd) {
+                                        Filter newFilter;
+                                        if (propName.length() != 0) {
+                                            newFilter = makePropertyFilter(propName.toString(), value.toString(), op.toString(), isStringValue);
+                                            propName = new StringBuilder();
+                                            value = new StringBuilder();
+                                            op = new StringBuilder();
+                                            isStringValue = false;
+                                        } else {
+                                            newFilter = getFilter(inBracketString.toString());
+                                        }
+                                        if (isAnd) {
+                                            currentFilter = new AndFilter(currentFilter, newFilter);
+                                        } else {
+                                            if (isOR) {
+                                                //ERK
+                                                currentFilter = new OrFilter(currentFilter, newFilter);
+                                                isOR = false;
+                                            } else {
+                                                currentFilter = newFilter;
+                                            }
+                                        }
+
+                                        isAnd = true;
+                                        wasJustAnd = true;
+                                    } else {
+                                        wasJustAnd = false;
+                                    }
                                 }
                                 break;
                             case '|':
-                                if (!wasJustOr) {
-                                    Filter newFilter;
-                                    if(propName.length()!=0) {
-                                        newFilter = makePropertyFilter(propName.toString(), value.toString(), op.toString(), isStringValue);
-                                        propName = new StringBuilder();
-                                        value = new StringBuilder();
-                                        op = new StringBuilder();
-                                        isStringValue = false;
-                                    } else {
-                                        newFilter = getFilter(inBracketString.toString());
-                                    }
-                                    if (isAnd) {
-                                        //ERK
-                                        currentFilter = new AndFilter(currentFilter, newFilter);
-                                        isAnd = false;
-                                    } else {
-                                        if (isOR) {
-                                            //ERK
-                                            currentFilter = new OrFilter(currentFilter, newFilter);
-                                            isOR = false;
-                                        } else {
-                                            currentFilter = newFilter;
-                                        }
-                                    }
-
-                                    isOR = true;
-                                    wasJustOr = true;
+                                if (inString) {
+                                    value.append(c);
                                 } else {
-                                    wasJustOr = false;
+                                    if (!wasJustOr) {
+                                        Filter newFilter;
+                                        if (propName.length() != 0) {
+                                            newFilter = makePropertyFilter(propName.toString(), value.toString(), op.toString(), isStringValue);
+                                            propName = new StringBuilder();
+                                            value = new StringBuilder();
+                                            op = new StringBuilder();
+                                            isStringValue = false;
+                                        } else {
+                                            newFilter = getFilter(inBracketString.toString());
+                                        }
+                                        if (isAnd) {
+                                            //ERK
+                                            currentFilter = new AndFilter(currentFilter, newFilter);
+                                            isAnd = false;
+                                        } else {
+                                            if (isOR) {
+                                                //ERK
+                                                currentFilter = new OrFilter(currentFilter, newFilter);
+                                                isOR = false;
+                                            } else {
+                                                currentFilter = newFilter;
+                                            }
+                                        }
+
+                                        isOR = true;
+                                        wasJustOr = true;
+                                    } else {
+                                        wasJustOr = false;
+                                    }
                                 }
                                 break;
 
@@ -223,7 +220,6 @@ public class FilterFactory {
         }
         return currentFilter;
     }
-
 
     public static PropertyFilter makePropertyFilter(String name, String valueString, String op, boolean isStringValue) {
         Optional<PropertyFilter.Operator> operator = PropertyFilter.Operator.getByValue(op);
