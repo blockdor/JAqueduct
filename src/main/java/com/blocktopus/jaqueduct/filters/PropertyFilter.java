@@ -5,9 +5,9 @@ import com.blocktopus.jaqueduct.exceptions.JAqueductException;
 
 import java.util.Optional;
 
-public class PropertyFilter implements Filter{
+public class PropertyFilter implements Filter {
 
-    public enum Operator{
+    public enum Operator {
         EQ("=="),
         NEQ("!="),
         LT("<"),
@@ -22,9 +22,9 @@ public class PropertyFilter implements Filter{
             this.value = value;
         }
 
-        public static Optional<Operator> getByValue(String value){
-            for(Operator op:Operator.values()){
-                if(op.value.equals(value)){
+        public static Optional<Operator> getByValue(String value) {
+            for (Operator op : Operator.values()) {
+                if (op.value.equals(value)) {
                     return Optional.of(op);
                 }
             }
@@ -66,28 +66,28 @@ public class PropertyFilter implements Filter{
                     Comparable c = (Comparable) o;
                     return c.compareTo(value) > 0;
                 } catch (ClassCastException cce) {
-                    throw new JAqueductException("Un-comparable values and > in filter",cce);
+                    throw new JAqueductException("Un-comparable values and > in filter", cce);
                 }
             case LT:
                 try {
                     Comparable c = (Comparable) o;
                     return c.compareTo(value) < 0;
                 } catch (ClassCastException cce) {
-                    throw new JAqueductException("Un-comparable values and < in filter",cce);
+                    throw new JAqueductException("Un-comparable values and < in filter", cce);
                 }
             case GTE:
                 try {
                     Comparable c = (Comparable) o;
                     return c.compareTo(value) >= 0;
                 } catch (ClassCastException cce) {
-                    throw new JAqueductException("Un-comparable values and >= in filter",cce);
+                    throw new JAqueductException("Un-comparable values and >= in filter", cce);
                 }
             case LTE:
                 try {
                     Comparable c = (Comparable) o;
                     return c.compareTo(value) <= 0;
                 } catch (ClassCastException cce) {
-                    throw new JAqueductException("Un-comparable values and <= in filter",cce);
+                    throw new JAqueductException("Un-comparable values and <= in filter", cce);
                 }
             case NEQ:
                 return !value.equals(o);

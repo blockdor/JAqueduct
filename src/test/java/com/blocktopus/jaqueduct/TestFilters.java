@@ -24,280 +24,282 @@ public class TestFilters {
     }
 
     @Test
-    public void testSimpleStringFilter(){
+    public void testSimpleStringFilter() {
         Filter f = FilterFactory.getFilter("(@.age==\"bob\")");
-        assertEquals(PropertyFilter.class,f.getClass());
-        PropertyFilter pf = (PropertyFilter)f;
-        assertEquals("age",pf.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf.getOp());
-        assertEquals("bob",pf.getValue());
+        assertEquals(PropertyFilter.class, f.getClass());
+        PropertyFilter pf = (PropertyFilter) f;
+        assertEquals("age", pf.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf.getOp());
+        assertEquals("bob", pf.getValue());
     }
 
     @Test
-    public void testSimpleIntegerFilter(){
+    public void testSimpleIntegerFilter() {
         Filter f = FilterFactory.getFilter("(@.age==10)");
-        assertEquals(PropertyFilter.class,f.getClass());
-        PropertyFilter pf = (PropertyFilter)f;
-        assertEquals("age",pf.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf.getOp());
-        assertEquals(10,pf.getValue());
+        assertEquals(PropertyFilter.class, f.getClass());
+        PropertyFilter pf = (PropertyFilter) f;
+        assertEquals("age", pf.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf.getOp());
+        assertEquals(10, pf.getValue());
     }
 
     @Test
-    public void testSimpleDoubleFilter(){
+    public void testSimpleDoubleFilter() {
         Filter f = FilterFactory.getFilter("(@.age==10.1)");
-        assertEquals(PropertyFilter.class,f.getClass());
-        PropertyFilter pf = (PropertyFilter)f;
-        assertEquals("age",pf.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf.getOp());
-        assertEquals(10.1,pf.getValue());
+        assertEquals(PropertyFilter.class, f.getClass());
+        PropertyFilter pf = (PropertyFilter) f;
+        assertEquals("age", pf.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf.getOp());
+        assertEquals(10.1, pf.getValue());
     }
+
     @Test
-    public void testSimpleStringFilterSpaces(){
+    public void testSimpleStringFilterSpaces() {
         Filter f = FilterFactory.getFilter("(@.age == 'bob')");
-        assertEquals(PropertyFilter.class,f.getClass());
-        PropertyFilter pf = (PropertyFilter)f;
-        assertEquals("age",pf.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf.getOp());
-        assertEquals("bob",pf.getValue());
+        assertEquals(PropertyFilter.class, f.getClass());
+        PropertyFilter pf = (PropertyFilter) f;
+        assertEquals("age", pf.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf.getOp());
+        assertEquals("bob", pf.getValue());
     }
 
     @Test
-    public void testSimpleIntegerFilterSpaces(){
+    public void testSimpleIntegerFilterSpaces() {
         Filter f = FilterFactory.getFilter("(@.age == 10)");
-        assertEquals(PropertyFilter.class,f.getClass());
-        PropertyFilter pf = (PropertyFilter)f;
-        assertEquals("age",pf.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf.getOp());
-        assertEquals(10,pf.getValue());
+        assertEquals(PropertyFilter.class, f.getClass());
+        PropertyFilter pf = (PropertyFilter) f;
+        assertEquals("age", pf.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf.getOp());
+        assertEquals(10, pf.getValue());
     }
 
     @Test
-    public void testSimpleDoubleFilterSpaces(){
+    public void testSimpleDoubleFilterSpaces() {
         Filter f = FilterFactory.getFilter("(@.age == 10.1)");
-        assertEquals(PropertyFilter.class,f.getClass());
-        PropertyFilter pf = (PropertyFilter)f;
-        assertEquals("age",pf.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf.getOp());
-        assertEquals(10.1,pf.getValue());
+        assertEquals(PropertyFilter.class, f.getClass());
+        PropertyFilter pf = (PropertyFilter) f;
+        assertEquals("age", pf.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf.getOp());
+        assertEquals(10.1, pf.getValue());
     }
 
     @Test
-    public void testAllOps(){
+    public void testAllOps() {
         for (PropertyFilter.Operator operator : PropertyFilter.Operator.values()) {
-            System.out.println(operator);
-            Filter f = FilterFactory.getFilter("(@.age "+operator.value+" 'bob')");
-            assertEquals(PropertyFilter.class,f.getClass());
-            PropertyFilter pf = (PropertyFilter)f;
-            assertEquals("age",pf.getName());
-            assertEquals(operator,pf.getOp());
-            assertEquals("bob",pf.getValue());
+            Filter f = FilterFactory.getFilter("(@.age " + operator.value + " 'bob')");
+            assertEquals(PropertyFilter.class, f.getClass());
+            PropertyFilter pf = (PropertyFilter) f;
+            assertEquals("age", pf.getName());
+            assertEquals(operator, pf.getOp());
+            assertEquals("bob", pf.getValue());
         }
 
     }
+
     @Test
-    public void testAndFilter(){
+    public void testAndFilter() {
         Filter f = FilterFactory.getFilter("(@.age == 10.1 && @.name == 'bob' )");
-        assertEquals(AndFilter.class,f.getClass() );
-        AndFilter af = (AndFilter)f;
-        assertEquals(PropertyFilter.class,af.getLeftFilter().getClass() );
-        assertEquals(PropertyFilter.class,af.getRightFilter().getClass() );
+        assertEquals(AndFilter.class, f.getClass());
+        AndFilter af = (AndFilter) f;
+        assertEquals(PropertyFilter.class, af.getLeftFilter().getClass());
+        assertEquals(PropertyFilter.class, af.getRightFilter().getClass());
 
-        PropertyFilter pf = (PropertyFilter)af.getLeftFilter();
-        assertEquals("age",pf.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf.getOp());
-        assertEquals(10.1,pf.getValue());
+        PropertyFilter pf = (PropertyFilter) af.getLeftFilter();
+        assertEquals("age", pf.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf.getOp());
+        assertEquals(10.1, pf.getValue());
 
-        PropertyFilter pf2 = (PropertyFilter)af.getRightFilter();
-        assertEquals("name",pf2.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf2.getOp());
-        assertEquals("bob",pf2.getValue());
+        PropertyFilter pf2 = (PropertyFilter) af.getRightFilter();
+        assertEquals("name", pf2.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf2.getOp());
+        assertEquals("bob", pf2.getValue());
     }
+
     @Test
-    public void testOrFilter(){
+    public void testOrFilter() {
         Filter f = FilterFactory.getFilter("(@.age == 10.1 || @.name == 'bob' )");
-        assertEquals(OrFilter.class,f.getClass() );
-        OrFilter af = (OrFilter)f;
-        assertEquals(PropertyFilter.class,af.getLeftFilter().getClass() );
-        assertEquals(PropertyFilter.class,af.getRightFilter().getClass() );
+        assertEquals(OrFilter.class, f.getClass());
+        OrFilter af = (OrFilter) f;
+        assertEquals(PropertyFilter.class, af.getLeftFilter().getClass());
+        assertEquals(PropertyFilter.class, af.getRightFilter().getClass());
 
-        PropertyFilter pf = (PropertyFilter)af.getLeftFilter();
-        assertEquals("age",pf.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf.getOp());
-        assertEquals(10.1,pf.getValue());
+        PropertyFilter pf = (PropertyFilter) af.getLeftFilter();
+        assertEquals("age", pf.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf.getOp());
+        assertEquals(10.1, pf.getValue());
 
-        PropertyFilter pf2 = (PropertyFilter)af.getRightFilter();
-        assertEquals("name",pf2.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf2.getOp());
-        assertEquals("bob",pf2.getValue());
+        PropertyFilter pf2 = (PropertyFilter) af.getRightFilter();
+        assertEquals("name", pf2.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf2.getOp());
+        assertEquals("bob", pf2.getValue());
     }
 
     @Test
-    public void testManyAndFilter(){
+    public void testManyAndFilter() {
         Filter f = FilterFactory.getFilter("(@.age>21&&@.name == 'bob'&&@.weight<10.1)");
-        assertEquals(AndFilter.class,f.getClass() );
-        AndFilter af = (AndFilter)f;
-        assertEquals(AndFilter.class,af.getLeftFilter().getClass() );
-        assertEquals(PropertyFilter.class,af.getRightFilter().getClass() );
+        assertEquals(AndFilter.class, f.getClass());
+        AndFilter af = (AndFilter) f;
+        assertEquals(AndFilter.class, af.getLeftFilter().getClass());
+        assertEquals(PropertyFilter.class, af.getRightFilter().getClass());
 
-        AndFilter af2 = (AndFilter)af.getLeftFilter();
-        assertEquals(PropertyFilter.class,af2.getLeftFilter().getClass() );
-        assertEquals(PropertyFilter.class,af2.getRightFilter().getClass() );
+        AndFilter af2 = (AndFilter) af.getLeftFilter();
+        assertEquals(PropertyFilter.class, af2.getLeftFilter().getClass());
+        assertEquals(PropertyFilter.class, af2.getRightFilter().getClass());
 
-        PropertyFilter pf = (PropertyFilter)af2.getLeftFilter();
-        assertEquals("age",pf.getName());
-        assertEquals(PropertyFilter.Operator.GT,pf.getOp());
-        assertEquals(21,pf.getValue());
+        PropertyFilter pf = (PropertyFilter) af2.getLeftFilter();
+        assertEquals("age", pf.getName());
+        assertEquals(PropertyFilter.Operator.GT, pf.getOp());
+        assertEquals(21, pf.getValue());
 
-        PropertyFilter pf2 = (PropertyFilter)af2.getRightFilter();
-        assertEquals("name",pf2.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf2.getOp());
-        assertEquals("bob",pf2.getValue());
+        PropertyFilter pf2 = (PropertyFilter) af2.getRightFilter();
+        assertEquals("name", pf2.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf2.getOp());
+        assertEquals("bob", pf2.getValue());
 
-        PropertyFilter pf3 = (PropertyFilter)af.getRightFilter();
-        assertEquals("weight",pf3.getName());
-        assertEquals(PropertyFilter.Operator.LT,pf3.getOp());
-        assertEquals(10.1,pf3.getValue());
+        PropertyFilter pf3 = (PropertyFilter) af.getRightFilter();
+        assertEquals("weight", pf3.getName());
+        assertEquals(PropertyFilter.Operator.LT, pf3.getOp());
+        assertEquals(10.1, pf3.getValue());
 
     }
 
     @Test
-    public void testManyOrFilter(){
+    public void testManyOrFilter() {
         Filter f = FilterFactory.getFilter("(@.age>21 || @.name == 'bob' || @.weight < 10.1)");
-        assertEquals(OrFilter.class,f.getClass() );
-        OrFilter af = (OrFilter)f;
-        assertEquals(OrFilter.class,af.getLeftFilter().getClass() );
-        assertEquals(PropertyFilter.class,af.getRightFilter().getClass() );
+        assertEquals(OrFilter.class, f.getClass());
+        OrFilter af = (OrFilter) f;
+        assertEquals(OrFilter.class, af.getLeftFilter().getClass());
+        assertEquals(PropertyFilter.class, af.getRightFilter().getClass());
 
-        OrFilter af2 = (OrFilter)af.getLeftFilter();
-        assertEquals(PropertyFilter.class,af2.getLeftFilter().getClass() );
-        assertEquals(PropertyFilter.class,af2.getRightFilter().getClass() );
+        OrFilter af2 = (OrFilter) af.getLeftFilter();
+        assertEquals(PropertyFilter.class, af2.getLeftFilter().getClass());
+        assertEquals(PropertyFilter.class, af2.getRightFilter().getClass());
 
-        PropertyFilter pf = (PropertyFilter)af2.getLeftFilter();
-        assertEquals("age",pf.getName());
-        assertEquals(PropertyFilter.Operator.GT,pf.getOp());
-        assertEquals(21,pf.getValue());
+        PropertyFilter pf = (PropertyFilter) af2.getLeftFilter();
+        assertEquals("age", pf.getName());
+        assertEquals(PropertyFilter.Operator.GT, pf.getOp());
+        assertEquals(21, pf.getValue());
 
-        PropertyFilter pf2 = (PropertyFilter)af2.getRightFilter();
-        assertEquals("name",pf2.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf2.getOp());
-        assertEquals("bob",pf2.getValue());
+        PropertyFilter pf2 = (PropertyFilter) af2.getRightFilter();
+        assertEquals("name", pf2.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf2.getOp());
+        assertEquals("bob", pf2.getValue());
 
-        PropertyFilter pf3 = (PropertyFilter)af.getRightFilter();
-        assertEquals("weight",pf3.getName());
-        assertEquals(PropertyFilter.Operator.LT,pf3.getOp());
-        assertEquals(10.1,pf3.getValue());
+        PropertyFilter pf3 = (PropertyFilter) af.getRightFilter();
+        assertEquals("weight", pf3.getName());
+        assertEquals(PropertyFilter.Operator.LT, pf3.getOp());
+        assertEquals(10.1, pf3.getValue());
     }
 
     @Test
-    public void testManyMixedFilter(){
+    public void testManyMixedFilter() {
         Filter f = FilterFactory.getFilter("(@.age>21 || @.name == 'bob' && @.weight < 10.1)");
-        assertEquals(AndFilter.class,f.getClass());
-        AndFilter af = (AndFilter)f;
-        assertEquals(OrFilter.class,af.getLeftFilter().getClass());
-        assertEquals(PropertyFilter.class,af.getRightFilter().getClass());
+        assertEquals(AndFilter.class, f.getClass());
+        AndFilter af = (AndFilter) f;
+        assertEquals(OrFilter.class, af.getLeftFilter().getClass());
+        assertEquals(PropertyFilter.class, af.getRightFilter().getClass());
 
-        OrFilter af2 = (OrFilter)af.getLeftFilter();
-        assertEquals(PropertyFilter.class,af2.getLeftFilter().getClass() );
-        assertEquals(PropertyFilter.class,af2.getRightFilter().getClass() );
+        OrFilter af2 = (OrFilter) af.getLeftFilter();
+        assertEquals(PropertyFilter.class, af2.getLeftFilter().getClass());
+        assertEquals(PropertyFilter.class, af2.getRightFilter().getClass());
 
-        PropertyFilter pf = (PropertyFilter)af2.getLeftFilter();
-        assertEquals("age",pf.getName());
-        assertEquals(PropertyFilter.Operator.GT,pf.getOp());
-        assertEquals(21,pf.getValue());
+        PropertyFilter pf = (PropertyFilter) af2.getLeftFilter();
+        assertEquals("age", pf.getName());
+        assertEquals(PropertyFilter.Operator.GT, pf.getOp());
+        assertEquals(21, pf.getValue());
 
-        PropertyFilter pf2 = (PropertyFilter)af2.getRightFilter();
-        assertEquals("name",pf2.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf2.getOp());
-        assertEquals("bob",pf2.getValue());
+        PropertyFilter pf2 = (PropertyFilter) af2.getRightFilter();
+        assertEquals("name", pf2.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf2.getOp());
+        assertEquals("bob", pf2.getValue());
 
-        PropertyFilter pf3 = (PropertyFilter)af.getRightFilter();
-        assertEquals("weight",pf3.getName());
-        assertEquals(PropertyFilter.Operator.LT,pf3.getOp());
-        assertEquals(10.1,pf3.getValue());
+        PropertyFilter pf3 = (PropertyFilter) af.getRightFilter();
+        assertEquals("weight", pf3.getName());
+        assertEquals(PropertyFilter.Operator.LT, pf3.getOp());
+        assertEquals(10.1, pf3.getValue());
     }
 
     @Test
-    public void testManyMixedFilter2(){
+    public void testManyMixedFilter2() {
         Filter f = FilterFactory.getFilter("(@.age>21 && @.name == 'bob' || @.weight < 10.1)");
-        assertEquals(OrFilter.class,f.getClass());
-        OrFilter af = (OrFilter)f;
-        assertEquals(AndFilter.class,af.getLeftFilter().getClass());
-        assertEquals(PropertyFilter.class,af.getRightFilter().getClass());
+        assertEquals(OrFilter.class, f.getClass());
+        OrFilter af = (OrFilter) f;
+        assertEquals(AndFilter.class, af.getLeftFilter().getClass());
+        assertEquals(PropertyFilter.class, af.getRightFilter().getClass());
 
-        AndFilter af2 = (AndFilter)af.getLeftFilter();
-        assertEquals(PropertyFilter.class,af2.getLeftFilter().getClass() );
-        assertEquals(PropertyFilter.class,af2.getRightFilter().getClass() );
+        AndFilter af2 = (AndFilter) af.getLeftFilter();
+        assertEquals(PropertyFilter.class, af2.getLeftFilter().getClass());
+        assertEquals(PropertyFilter.class, af2.getRightFilter().getClass());
 
-        PropertyFilter pf = (PropertyFilter)af2.getLeftFilter();
-        assertEquals("age",pf.getName());
-        assertEquals(PropertyFilter.Operator.GT,pf.getOp());
-        assertEquals(21,pf.getValue());
+        PropertyFilter pf = (PropertyFilter) af2.getLeftFilter();
+        assertEquals("age", pf.getName());
+        assertEquals(PropertyFilter.Operator.GT, pf.getOp());
+        assertEquals(21, pf.getValue());
 
-        PropertyFilter pf2 = (PropertyFilter)af2.getRightFilter();
-        assertEquals("name",pf2.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf2.getOp());
-        assertEquals("bob",pf2.getValue());
+        PropertyFilter pf2 = (PropertyFilter) af2.getRightFilter();
+        assertEquals("name", pf2.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf2.getOp());
+        assertEquals("bob", pf2.getValue());
 
-        PropertyFilter pf3 = (PropertyFilter)af.getRightFilter();
-        assertEquals("weight",pf3.getName());
-        assertEquals(PropertyFilter.Operator.LT,pf3.getOp());
-        assertEquals(10.1,pf3.getValue());
+        PropertyFilter pf3 = (PropertyFilter) af.getRightFilter();
+        assertEquals("weight", pf3.getName());
+        assertEquals(PropertyFilter.Operator.LT, pf3.getOp());
+        assertEquals(10.1, pf3.getValue());
     }
 
     @Test
-    public void testManyMixedFilterBrackets(){
+    public void testManyMixedFilterBrackets() {
         Filter f = FilterFactory.getFilter("(@.age>21 && (@.name == 'bob' || @.weight < 10.1))");
-        assertEquals(AndFilter.class,f.getClass());
-        AndFilter af = (AndFilter)f;
-        assertEquals(PropertyFilter.class,af.getLeftFilter().getClass());
-        assertEquals(OrFilter.class,af.getRightFilter().getClass());
+        assertEquals(AndFilter.class, f.getClass());
+        AndFilter af = (AndFilter) f;
+        assertEquals(PropertyFilter.class, af.getLeftFilter().getClass());
+        assertEquals(OrFilter.class, af.getRightFilter().getClass());
 
-        OrFilter af2 = (OrFilter)af.getRightFilter();
-        assertEquals(PropertyFilter.class,af2.getLeftFilter().getClass() );
-        assertEquals(PropertyFilter.class,af2.getRightFilter().getClass() );
+        OrFilter af2 = (OrFilter) af.getRightFilter();
+        assertEquals(PropertyFilter.class, af2.getLeftFilter().getClass());
+        assertEquals(PropertyFilter.class, af2.getRightFilter().getClass());
 
-        PropertyFilter pf = (PropertyFilter)af.getLeftFilter();
-        assertEquals("age",pf.getName());
-        assertEquals(PropertyFilter.Operator.GT,pf.getOp());
-        assertEquals(21,pf.getValue());
+        PropertyFilter pf = (PropertyFilter) af.getLeftFilter();
+        assertEquals("age", pf.getName());
+        assertEquals(PropertyFilter.Operator.GT, pf.getOp());
+        assertEquals(21, pf.getValue());
 
-        PropertyFilter pf2 = (PropertyFilter)af2.getLeftFilter();
-        assertEquals("name",pf2.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf2.getOp());
-        assertEquals("bob",pf2.getValue());
+        PropertyFilter pf2 = (PropertyFilter) af2.getLeftFilter();
+        assertEquals("name", pf2.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf2.getOp());
+        assertEquals("bob", pf2.getValue());
 
-        PropertyFilter pf3 = (PropertyFilter)af2.getRightFilter();
-        assertEquals("weight",pf3.getName());
-        assertEquals(PropertyFilter.Operator.LT,pf3.getOp());
-        assertEquals(10.1,pf3.getValue());
+        PropertyFilter pf3 = (PropertyFilter) af2.getRightFilter();
+        assertEquals("weight", pf3.getName());
+        assertEquals(PropertyFilter.Operator.LT, pf3.getOp());
+        assertEquals(10.1, pf3.getValue());
     }
 
     @Test
-    public void testManyMixedFilterBrackets2(){
+    public void testManyMixedFilterBrackets2() {
         Filter f = FilterFactory.getFilter("((@.age>21 && @.name == 'bob') || @.weight < 10.1)");
-        assertEquals(OrFilter.class,f.getClass());
-        OrFilter af = (OrFilter)f;
-        assertEquals(AndFilter.class,af.getLeftFilter().getClass());
-        assertEquals(PropertyFilter.class,af.getRightFilter().getClass());
+        assertEquals(OrFilter.class, f.getClass());
+        OrFilter af = (OrFilter) f;
+        assertEquals(AndFilter.class, af.getLeftFilter().getClass());
+        assertEquals(PropertyFilter.class, af.getRightFilter().getClass());
 
-        AndFilter af2 = (AndFilter)af.getLeftFilter();
-        assertEquals(PropertyFilter.class,af2.getLeftFilter().getClass() );
-        assertEquals(PropertyFilter.class,af2.getRightFilter().getClass() );
+        AndFilter af2 = (AndFilter) af.getLeftFilter();
+        assertEquals(PropertyFilter.class, af2.getLeftFilter().getClass());
+        assertEquals(PropertyFilter.class, af2.getRightFilter().getClass());
 
-        PropertyFilter pf = (PropertyFilter)af2.getLeftFilter();
-        assertEquals("age",pf.getName());
-        assertEquals(PropertyFilter.Operator.GT,pf.getOp());
-        assertEquals(21,pf.getValue());
+        PropertyFilter pf = (PropertyFilter) af2.getLeftFilter();
+        assertEquals("age", pf.getName());
+        assertEquals(PropertyFilter.Operator.GT, pf.getOp());
+        assertEquals(21, pf.getValue());
 
-        PropertyFilter pf2 = (PropertyFilter)af2.getRightFilter();
-        assertEquals("name",pf2.getName());
-        assertEquals(PropertyFilter.Operator.EQ,pf2.getOp());
-        assertEquals("bob",pf2.getValue());
+        PropertyFilter pf2 = (PropertyFilter) af2.getRightFilter();
+        assertEquals("name", pf2.getName());
+        assertEquals(PropertyFilter.Operator.EQ, pf2.getOp());
+        assertEquals("bob", pf2.getValue());
 
-        PropertyFilter pf3 = (PropertyFilter)af.getRightFilter();
-        assertEquals("weight",pf3.getName());
-        assertEquals(PropertyFilter.Operator.LT,pf3.getOp());
-        assertEquals(10.1,pf3.getValue());
+        PropertyFilter pf3 = (PropertyFilter) af.getRightFilter();
+        assertEquals("weight", pf3.getName());
+        assertEquals(PropertyFilter.Operator.LT, pf3.getOp());
+        assertEquals(10.1, pf3.getValue());
     }
 }

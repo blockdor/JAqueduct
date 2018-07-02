@@ -40,15 +40,15 @@ public class FilterFactory {
             switch (c) {
                 case '(':
                     inBracket++;
-                    if(inBracket>1) {
+                    if (inBracket > 1) {
                         inBracketString.append(c);
                     }
                     break;
                 case ')':
-                   // System.out.println(inBracket);
-                    if(inBracket==1) {
+                    // System.out.println(inBracket);
+                    if (inBracket == 1) {
                         Filter newFilter;
-                        if(propName.length()!=0){
+                        if (propName.length() != 0) {
                             newFilter = makePropertyFilter(propName.toString(), value.toString(), op.toString(), isStringValue);
                             propName = new StringBuilder();
                             value = new StringBuilder();
@@ -81,7 +81,7 @@ public class FilterFactory {
                     if (inBracket > 1) {
                         inBracketString.append(c);
 
-                    }else {
+                    } else {
                         switch (c) {
                             case '!':
                                 if (inString) {

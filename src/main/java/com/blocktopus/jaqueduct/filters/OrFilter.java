@@ -2,7 +2,7 @@ package com.blocktopus.jaqueduct.filters;
 
 import com.blocktopus.jaqueduct.JsonObject;
 
-public class OrFilter implements Filter{
+public class OrFilter implements Filter {
 
     private Filter leftFilter;
     private Filter rightFilter;
@@ -22,7 +22,7 @@ public class OrFilter implements Filter{
 
     @Override
     public boolean evaluate(JsonObject jo) {
-        return leftFilter.evaluate(jo)|| rightFilter.evaluate(jo);
+        return leftFilter.evaluate(jo) || rightFilter.evaluate(jo);
     }
 
     @Override

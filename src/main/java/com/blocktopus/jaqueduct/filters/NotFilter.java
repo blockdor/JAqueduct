@@ -2,7 +2,7 @@ package com.blocktopus.jaqueduct.filters;
 
 import com.blocktopus.jaqueduct.JsonObject;
 
-public class NotFilter implements Filter{
+public class NotFilter implements Filter {
 
     private Filter f1;
 
