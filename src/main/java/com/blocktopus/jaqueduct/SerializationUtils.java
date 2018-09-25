@@ -1,5 +1,6 @@
 package com.blocktopus.jaqueduct;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.function.Function;
 
@@ -49,6 +50,8 @@ public class SerializationUtils {
         }
     }
 
+
+
     public JsonObject jsonToJsonObject(String json) {
         return jsonToObject(json, JsonObject.class);
     }
@@ -62,4 +65,17 @@ public class SerializationUtils {
         Object rootList = jsonToObject(json);
         return convertingFunction.apply(rootList);
     }
+
+    public <T> T jsonToObject(InputStream json, Class<T> clazz) {
+        try {
+            return factory.getObjectMapper().readValue(json, clazz);
+        } catch (Throwable e) {
+            throw new JAqueductException(e);
+        }
+    }
+
+    public JsonObject jsonToJsonObject(InputStream is){
+        return jsonToObject(is,JsonObject.class);
+    }
+
 }
